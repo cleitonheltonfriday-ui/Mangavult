@@ -1,9 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Mangavult</title>
+
+<style>
+body{
+    margin:0;
+    background:#121212;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+header{
+    background:#1e1e1e;
+    padding:16px;
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+    border-bottom:1px solid #333;
+}
+
+.importar{
+    margin:16px;
+    padding:14px;
+    background:#ff8c00;
+    border:none;
+    border-radius:8px;
+    width:calc(100% - 32px);
+    font-size:18px;
+    font-weight:bold;
+}
+
+.biblioteca{
+    padding:16px;
+}
+
+.card{
+    background:#1e1e1e;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:12px;
+    display:flex;
+    gap:12px;
+}
+
+.capa{
+    width:80px;
+    height:110px;
+    background:#333;
+    border-radius:6px;
+}
+
+.info h2{
+    margin:0;
+    font-size:18px;
+}
+
+.info p{
+    margin:6px 0;
+    color:#bbb;
+}
+</style>
 </head>
+
 <body>
-<h1>Mangavult funcionando!</h1>
+
+<header>
+Mangavult
+</header>
+
+<button class="importar">
++ Importar Capítulo
+</button>
+
+<div class="biblioteca">
+
+<div class="card">
+<div class="capa"></div>
+
+<div class="info">
+<h2>One Punch Man</h2>
+<p>127 capítulos</p>
+<p>Última leitura: Cap. 127</p>
+</div>
+</div>
+
+<div class="card">
+<div class="capa"></div>
+
+<div class="info">
+<h2>Berserk</h2>
+<p>381 capítulos</p>
+<p>Última leitura: Cap. 381</p>
+</div>
+</div>
+
+</div>
+
 </body>
 </html>
