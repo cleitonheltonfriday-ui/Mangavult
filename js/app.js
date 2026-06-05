@@ -2,15 +2,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const biblioteca = document.querySelector(".biblioteca");
 
-    biblioteca.innerHTML = `
-        <div class="card">
-            <div class="capa"></div>
+    const obras = [
+        {
+            nome: "One Punch Man",
+            capitulos: 127,
+            ultimaLeitura: 127
+        },
+        {
+            nome: "Berserk",
+            capitulos: 381,
+            ultimaLeitura: 381
+        }
+    ];
 
-            <div class="info">
-                <h2>Mangavult funcionando</h2>
-                <p>Biblioteca carregada pelo JavaScript</p>
+    biblioteca.innerHTML = "";
+
+    obras.forEach(obra => {
+
+        biblioteca.innerHTML += `
+            <div class="card">
+
+                <div class="capa"></div>
+
+                <div class="info">
+                    <h2>${obra.nome}</h2>
+                    <p>${obra.capitulos} capítulos</p>
+                    <p>Última leitura: Cap. ${obra.ultimaLeitura}</p>
+                </div>
+
             </div>
-        </div>
-    `;
+        `;
+
+    });
 
 });
