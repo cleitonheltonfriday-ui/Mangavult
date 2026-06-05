@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+alert("JavaScript carregado!");
+
     const biblioteca = document.querySelector(".biblioteca");
     const botaoImportar = document.querySelector(".importar");
 
