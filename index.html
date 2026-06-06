@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Mangavult</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════ SPLASH ═══════════ -->
+<div id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-content">
+    <div class="splash-logo-wrap">
+      <div class="splash-icon">⚡</div>
+      <div class="splash-nome">Mangavult</div>
+    </div>
+    <div class="splash-tagline">Seu leitor pessoal de mangá</div>
+    <div class="splash-barra"><div class="splash-barra-fill"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ TELA: BIBLIOTECA ═══════════ -->
+<div id="tela-biblioteca" class="tela ativa">
+  <header class="header-biblioteca">
+    <button class="btn-icon" id="btn-menu-principal">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <span class="logo-texto">Mangavult</span>
+    <button class="btn-icon" id="btn-busca">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </button>
+  </header>
+  <div class="busca-wrap" id="busca-wrap">
+    <input class="busca-input" id="busca-input" placeholder="Buscar obra…" autocomplete="off">
+    <button class="busca-fechar" id="busca-fechar">✕</button>
+  </div>
+  <div class="biblioteca-lista" id="biblioteca-lista">
+    <div class="biblioteca-vazia" id="biblioteca-vazia">
+      <div class="vazia-icon">📚</div>
+      <p>Sua biblioteca está vazia</p>
+      <p class="vazia-sub">Toque em + para importar um capítulo</p>
+    </div>
+  </div>
+  <button class="fab" id="btn-importar">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ═══════════ TELA: LEITOR ═══════════ -->
+<div id="tela-leitor" class="tela">
+  <div class="leitor-header" id="leitor-header">
+    <div class="leitor-header-linha1">
+      <button class="btn-icon" id="btn-voltar-biblioteca">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="leitor-titulo-wrap">
+        <span class="leitor-obra-nome" id="leitor-obra-nome"></span>
+      </div>
+      <button class="btn-icon" id="btn-abrir-menu-leitor">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="leitor-header-linha2">
+      <span class="leitor-badge" id="leitor-cap-badge"></span>
+      <span class="leitor-badge" id="leitor-pg-badge"></span>
+      <button class="leitor-menu-btn" id="btn-menu-leitor-pill">Menu ‹</button>
+    </div>
+  </div>
+
+  <div class="leitor-viewport" id="leitor-viewport">
+    <div class="leitor-paginas" id="leitor-paginas"></div>
+    <div class="leitor-paginas-preload" id="leitor-preload"></div>
+    <div class="zona-toque zona-esq" id="zona-esq"></div>
+    <div class="zona-toque zona-dir" id="zona-dir"></div>
+  </div>
+
+  <div class="leitor-footer" id="leitor-footer">
+    <button class="nav-arrow" id="nav-prev">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="progresso-wrap">
+      <input type="range" class="progresso-slider" id="progresso-slider" min="0" value="0">
+      <div class="progresso-nums" id="progresso-nums"></div>
+    </div>
+    <button class="nav-arrow" id="nav-next">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <!-- Painel lateral -->
+  <div class="painel-overlay" id="painel-overlay"></div>
+  <div class="painel-lateral" id="painel-lateral">
+    <button class="painel-fechar" id="btn-fechar-painel">✕</button>
+    <div class="painel-obra-info">
+      <div class="painel-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e05a28" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="painel-obra-nome" id="painel-obra-nome"></span>
+      </div>
+      <div class="painel-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        <span class="painel-cap-nome" id="painel-cap-nome"></span>
+      </div>
+    </div>
+    <div class="painel-nav">
+      <button class="painel-nav-arrow" id="painel-prev-pag">‹</button>
+      <div class="painel-select-wrap">
+        <div class="painel-select-label">Page</div>
+        <div class="painel-select-val" id="painel-pag-val"></div>
+      </div>
+      <button class="painel-nav-arrow" id="painel-next-pag">›</button>
+    </div>
+    <div class="painel-nav">
+      <button class="painel-nav-arrow" id="painel-prev-cap">‹</button>
+      <div class="painel-select-wrap">
+        <div class="painel-select-label">Chapter</div>
+        <div class="painel-select-val" id="painel-cap-val"></div>
+      </div>
+      <button class="painel-nav-arrow" id="painel-next-cap">›</button>
+    </div>
+    <div class="painel-divisor"></div>
+    <button class="painel-opcao" id="opt-double-page">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Double Page
+    </button>
+    <button class="painel-opcao" id="opt-offset">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+      Offset Double Spreads
+    </button>
+    <button class="painel-opcao" id="opt-fit">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <span id="opt-fit-label">Fit Both</span>
+    </button>
+    <button class="painel-opcao" id="opt-rtl">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
+      Right To Left
+    </button>
+    <button class="painel-opcao" id="opt-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+      Header Hidden
+    </button>
+    <button class="painel-opcao painel-opcao-com-gear" id="opt-progress">
+      <div class="painel-opcao-esq">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg>
+        Progress Hidden
+      </div>
+      <svg class="gear-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="painel-divisor"></div>
+    <button class="painel-opcao" id="opt-reader-settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Reader Settings
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: READER SETTINGS (completo, como MangaDex) ═══════════ -->
+<div id="modal-reader-settings" class="modal-overlay" style="display:none">
+  <div class="modal-sheet rs-sheet">
+    <div class="rs-header">
+      <span class="rs-titulo">Reader Settings</span>
+      <button class="btn-fechar-modal" id="btn-rs-fechar" style="position:relative;top:0;right:0">✕</button>
+    </div>
+
+    <!-- Abas -->
+    <div class="rs-abas">
+      <button class="rs-aba ativo" data-aba="layout">Page Layout</button>
+      <button class="rs-aba" data-aba="fit">Image Fit</button>
+      <button class="rs-aba" data-aba="behaviors">Behaviors</button>
+    </div>
+
+    <!-- Aba: Page Layout -->
+    <div class="rs-painel" id="rs-aba-layout">
+      <div class="rs-secao-titulo">Page Display Style</div>
+      <div class="rs-grupo">
+        <button class="rs-layout-btn" data-val="simples" title="Single Page">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="1"/></svg>
+        </button>
+        <button class="rs-layout-btn" data-val="dupla" title="Double Page">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="9" height="20" rx="1"/><rect x="13" y="2" width="9" height="20" rx="1"/></svg>
+        </button>
+      </div>
+
+      <div class="rs-secao-titulo" style="margin-top:20px">Offset Double Spreads</div>
+      <button class="rs-toggle-btn" id="rs-offset">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+        Offset Double Spreads
+      </button>
+
+      <div class="rs-secao-titulo" style="margin-top:20px">Reading Direction</div>
+      <div class="rs-grupo">
+        <button class="rs-dir-btn" data-val="ltr" title="Left to Right">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </button>
+        <button class="rs-dir-btn" data-val="rtl" title="Right to Left">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
+        </button>
+      </div>
+
+      <div class="rs-secao-titulo" style="margin-top:20px">Header Visibility</div>
+      <div class="rs-grupo">
+        <button class="rs-header-btn" data-val="visivel" title="Show Header">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        </button>
+        <button class="rs-header-btn" data-val="oculto" title="Hide Header">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+        </button>
+      </div>
+
+      <div class="rs-secao-titulo" style="margin-top:20px">Progress Bar</div>
+      <div class="rs-grupo">
+        <button class="rs-progress-btn" data-val="visivel" title="Show Progress">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="18" x2="21" y2="18"/><circle cx="8" cy="18" r="2" fill="currentColor"/></svg>
+        </button>
+        <button class="rs-progress-btn" data-val="oculto" title="Hide Progress">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="18" x2="21" y2="18"/><line x1="4" y1="4" x2="20" y2="20" stroke="#ff6b6b"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Aba: Image Fit -->
+    <div class="rs-painel" id="rs-aba-fit" style="display:none">
+      <div class="rs-secao-titulo">Image Sizing</div>
+      <div class="rs-fit-opcoes">
+        <label class="rs-fit-item">
+          <button class="rs-fit-btn rs-fit-check" data-val="fitBoth">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+          <span>Contain to width &amp; height (Fit Both)</span>
+        </label>
+        <label class="rs-fit-item">
+          <button class="rs-fit-btn rs-fit-check" data-val="fitWidth">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="17 7 21 12 17 17"/><polyline points="7 7 3 12 7 17"/></svg>
+          </button>
+          <span>Contain to width (Fit Width)</span>
+        </label>
+        <label class="rs-fit-item">
+          <button class="rs-fit-btn rs-fit-check" data-val="fitHeight">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="3" x2="12" y2="21"/><polyline points="7 7 12 3 17 7"/><polyline points="7 17 12 21 17 17"/></svg>
+          </button>
+          <span>Contain to height (Fit Height)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Aba: Behaviors -->
+    <div class="rs-painel" id="rs-aba-behaviors" style="display:none">
+      <div class="rs-secao-titulo">Zoom</div>
+      <p class="rs-desc">Pinch para dar zoom · Double-tap para zoom 2.5× · Double-tap novamente para resetar</p>
+      <div class="rs-secao-titulo" style="margin-top:16px">Tap Zones</div>
+      <p class="rs-desc">Toque na metade esquerda da tela para avançar (RTL ativo), direita para voltar. Toque no centro para mostrar/ocultar barras temporariamente.</p>
+      <div class="rs-secao-titulo" style="margin-top:16px">Fim de Capítulo</div>
+      <p class="rs-desc">Ao chegar na última página e tentar virar, aparece a tela de conclusão com opções de continuar ou ir para o menu.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: MENU PRINCIPAL ═══════════ -->
+<div id="modal-menu-principal" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Menu</h2>
+    <div class="menu-principal-lista">
+      <button class="menu-principal-item" id="menu-importar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importar Capítulo
+      </button>
+      <button class="menu-principal-item" id="menu-armazenamento">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Armazenamento
+      </button>
+      <button class="menu-principal-item" id="menu-migrar-acesso">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Migração de Acesso
+      </button>
+      <button class="menu-principal-item" id="menu-remigrar-acesso">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Remigrar Acesso
+      </button>
+      <button class="menu-principal-item" id="menu-sobre">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Sobre o Mangavult
+      </button>
+    </div>
+    <button class="btn-cancelar" id="btn-fechar-menu-principal">Fechar</button>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: ARMAZENAMENTO ═══════════ -->
+<div id="modal-armazenamento" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Armazenamento</h2>
+    <div id="armazenamento-info"></div>
+    <button class="btn-cancelar" id="btn-fechar-armazenamento">Fechar</button>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: IMPORTAR ═══════════ -->
+<div id="modal-importar" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Importar Capítulo</h2>
+    <div class="import-opcoes">
+      <label class="import-btn">
+        <input type="file" id="input-zip" accept=".zip" style="display:none">
+        <div class="import-btn-icon">📦</div>
+        <div class="import-btn-texto"><strong>Arquivo ZIP</strong><span>Imagens numeradas (1.jpg, 2.png…)</span></div>
+      </label>
+      <label class="import-btn">
+        <input type="file" id="input-imgs" accept="image/*" multiple style="display:none">
+        <div class="import-btn-icon">🖼️</div>
+        <div class="import-btn-texto"><strong>Selecionar Imagens</strong><span>Múltiplas imagens da galeria</span></div>
+      </label>
+      <label class="import-btn">
+        <input type="file" id="input-pdf" accept=".pdf" style="display:none">
+        <div class="import-btn-icon">📄</div>
+        <div class="import-btn-texto"><strong>Arquivo PDF</strong><span>Converte páginas automaticamente</span></div>
+      </label>
+      <div class="import-btn import-btn-derivar" id="btn-derivar-obra" style="cursor:pointer">
+        <div class="import-btn-icon">🌐</div>
+        <div class="import-btn-texto"><strong>Derivar Obra da Web</strong><span>Busca capa e descrição automaticamente</span></div>
+      </div>
+      <div class="import-btn" id="btn-remigrar-cap" style="cursor:pointer">
+        <div class="import-btn-icon">🔗</div>
+        <div class="import-btn-texto"><strong>Remigrar Capítulo</strong><span>Importar via link de migração</span></div>
+      </div>
+    </div>
+    <button class="btn-cancelar" id="btn-cancelar-import">Cancelar</button>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: FORMULÁRIO CAPÍTULO ═══════════ -->
+<div id="modal-formulario" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Novo Capítulo</h2>
+    <div class="form-group">
+      <label class="form-label">Nome da Obra</label>
+      <input class="form-input" id="input-nome-obra" placeholder="Ex: One Punch Man" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Capítulo</label>
+      <input class="form-input" id="input-capitulo" placeholder="Ex: 132" type="text" autocomplete="off">
+    </div>
+    <div id="progresso-import" style="display:none">
+      <div class="progresso-barra-bg"><div class="progresso-barra-fill" id="progresso-fill"></div></div>
+      <p class="progresso-texto" id="progresso-texto">Processando…</p>
+    </div>
+    <div class="form-botoes">
+      <button class="btn-secundario" id="btn-form-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-form-salvar">Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: DERIVAR OBRA ═══════════ -->
+<div id="modal-derivar" class="modal-overlay" style="display:none">
+  <div class="modal-sheet" style="max-height:90vh;overflow-y:auto">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Derivar Obra da Web</h2>
+    <div class="form-group">
+      <label class="form-label">Nome da obra (pode ser aproximado)</label>
+      <input class="form-input" id="input-derivar-nome" placeholder="Ex: Jojo part 1, One Punch..." autocomplete="off">
+    </div>
+    <div id="derivar-progresso" style="display:none">
+      <div class="progresso-barra-bg"><div class="progresso-barra-fill" id="derivar-fill" style="width:0%"></div></div>
+      <p class="progresso-texto" id="derivar-texto">Buscando…</p>
+    </div>
+    <!-- Preview do resultado encontrado -->
+    <div id="derivar-resultado" style="display:none;margin-bottom:14px">
+      <div class="derivar-preview-header">
+        <img id="derivar-res-capa" style="width:60px;height:85px;object-fit:cover;border-radius:6px;flex-shrink:0" src="" alt="">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:700;color:var(--text)" id="derivar-res-titulo"></div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px" id="derivar-res-original"></div>
+          <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+            <span style="font-size:12px;color:#ffd700" id="derivar-res-nota"></span>
+            <span style="font-size:12px;color:var(--text-muted)" id="derivar-res-ano"></span>
+          </div>
+        </div>
+      </div>
+      <div id="derivar-res-tags" style="display:flex;flex-wrap:wrap;gap:4px;margin:10px 0"></div>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.5;margin:0" id="derivar-res-desc"></p>
+    </div>
+    <div class="form-botoes">
+      <button class="btn-secundario" id="btn-derivar-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-derivar-confirmar">Buscar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: OBRA DETALHES (estilo MangaDex) ═══════════ -->
+<div id="modal-obra" class="modal-overlay" style="display:none">
+  <div class="modal-sheet modal-obra-sheet" style="padding:0;overflow:hidden">
+    <!-- Banner degradê -->
+    <div class="obra-banner" id="obra-modal-banner"></div>
+    <!-- Conteúdo -->
+    <div class="obra-modal-conteudo">
+      <button class="btn-fechar-modal obra-fechar-abs" id="btn-fechar-obra">✕</button>
+      <!-- Header: capa + info -->
+      <div class="obra-header-modal">
+        <div id="obra-capa-wrap"></div>
+        <div style="flex:1;min-width:0">
+          <h2 class="obra-titulo-modal" id="obra-titulo-modal"></h2>
+          <div class="obra-titulo-original" id="obra-titulo-original-modal"></div>
+          <div class="obra-meta-row">
+            <span class="obra-nota-badge" id="obra-nota-modal"></span>
+            <span class="obra-ano-badge" id="obra-ano-modal"></span>
+            <span class="obra-status-badge" id="obra-status-modal"></span>
+          </div>
+        </div>
+      </div>
+      <!-- Tags -->
+      <div class="obra-tags-wrap" id="obra-tags-modal"></div>
+      <!-- Ações principais -->
+      <div class="obra-acoes">
+        <button class="btn-primario" id="btn-continuar-leitura">▶ Continuar</button>
+        <button class="btn-secundario" id="btn-add-proximo">+ Próximo Cap.</button>
+      </div>
+      <!-- Ações secundárias -->
+      <div class="obra-acoes-secundarias">
+        <button class="btn-mini" id="btn-trocar-capa">🖼 Trocar capa</button>
+        <button class="btn-mini" id="btn-derivar-obra-existente">🌐 Derivar da web</button>
+        <button class="btn-mini" id="btn-editar-descricao">✏️ Descrição</button>
+      </div>
+      <!-- Sub (contagem) -->
+      <p class="obra-sub-modal" id="obra-sub-modal" style="margin:8px 0 4px;font-size:13px;color:var(--text-muted)"></p>
+      <!-- Descrição -->
+      <p class="obra-descricao-modal" id="obra-descricao-modal"></p>
+      <!-- Lista capítulos -->
+      <div class="capitulos-lista" id="capitulos-lista-modal"></div>
+      <div class="obra-acoes" style="margin-top:12px">
+        <button class="btn-perigo" id="btn-deletar-obra">Excluir Obra</button>
+      </div>
+    </div>
+    <input type="file" id="input-trocar-capa" accept="image/*" style="display:none">
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: EDITAR DESCRIÇÃO ═══════════ -->
+<div id="modal-descricao" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Descrição da Obra</h2>
+    <div class="form-group">
+      <textarea class="form-input" id="input-descricao" rows="6"
+        style="resize:none;line-height:1.5" placeholder="Digite ou cole a descrição aqui…"></textarea>
+    </div>
+    <div style="margin-bottom:12px">
+      <button class="btn-mini" id="btn-derivar-descricao-web" style="width:100%;padding:12px;font-size:13px">
+        🌐 Derivar descrição da web
+      </button>
+    </div>
+    <div class="form-botoes">
+      <button class="btn-secundario" id="btn-descricao-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-descricao-salvar">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: BOAS-VINDAS ═══════════ -->
+<div id="modal-boas-vindas" class="modal-overlay" style="display:none">
+  <div class="modal-sheet bv-sheet">
+    <button class="btn-fechar-modal" id="btn-bv-fechar">✕</button>
+    <div class="bv-header"><div class="bv-logo">⚡ Mangavult</div></div>
+    <div class="bv-secao">
+      <div class="bv-secao-titulo">📖 O que é o Mangavult?</div>
+      <p class="bv-texto">O <strong>Mangavult</strong> é um <em>leitor pessoal e offline</em> de mangá, criado para quem já tem os capítulos em arquivo — ZIP, PDF ou imagens — e quer uma experiência próxima à do MangaDex: dupla de páginas, modo Oriental (direita para esquerda), offset de spreads e muito mais.</p>
+      <p class="bv-texto">Tudo fica salvo <strong>localmente no seu navegador</strong>. Sem servidores, sem cadastro, sem limite de uso.</p>
+    </div>
+    <div class="bv-divisor"></div>
+    <div class="bv-secao">
+      <div class="bv-secao-titulo" style="color:#ff9966">⚠️ O que o Mangavult <em>não</em> é</div>
+      <p class="bv-texto">O Mangavult <strong>não é</strong> um site de leitura online e <strong>não possui</strong> catálogo, títulos ou atualizações. Você não vai encontrar mangás para baixar aqui — o Mangavult é apenas o <em>leitor</em>. O conteúdo, você traz.</p>
+    </div>
+    <div class="bv-divisor"></div>
+    <div class="bv-secao">
+      <div class="bv-secao-titulo" style="color:#7ecf7e">✅ Como começar</div>
+      <p class="bv-texto">Toque no <strong>botão +</strong> na biblioteca e importe um capítulo em ZIP, PDF ou imagens da galeria.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: PREFERÊNCIA BOAS-VINDAS ═══════════ -->
+<div id="modal-bv-pref" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <button class="btn-fechar-modal" id="btn-bv-pref-fechar">✕</button>
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Exibir na próxima vez?</h2>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.5">Deseja ver esta mensagem toda vez que abrir o Mangavult?</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-primario" id="btn-bv-sempre">✓ Sempre mostrar</button>
+      <button class="btn-secundario" id="btn-bv-nunca">✕ Não mostrar mais</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: REMIGRAR CAPÍTULO ═══════════ -->
+<div id="modal-remigrar" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Remigrar Capítulo</h2>
+    <div class="tutorial-box" style="margin-bottom:16px">
+      <div class="tutorial-icon">🔗</div>
+      <div class="tutorial-texto">Selecione o arquivo <strong>.mvchapter</strong> gerado ao clicar em 🔗 na lista de capítulos. O arquivo é baixado automaticamente.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Arquivo de capítulo (.mvchapter)</label>
+      <input type="file" class="form-input" id="input-remigrar-arquivo" accept=".mvchapter,.json" style="padding:10px">
+    </div>
+    <div class="form-botoes">
+      <button class="btn-secundario" id="btn-remigrar-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-remigrar-confirmar">Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: REMIGRAR ACESSO ═══════════ -->
+<div id="modal-remigrar-acesso" class="modal-overlay" style="display:none">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-titulo">Remigrar Acesso Completo</h2>
+    <div class="tutorial-box" style="margin-bottom:16px">
+      <div class="tutorial-icon">📦</div>
+      <div class="tutorial-texto">Selecione o arquivo <strong>.json</strong> de backup gerado em <strong>Menu → Migração de Acesso</strong>. Ele é baixado automaticamente para o seu dispositivo.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Arquivo de backup (.json)</label>
+      <input type="file" class="form-input" id="input-remigrar-acesso-arquivo" accept=".json" style="padding:10px">
+    </div>
+    <div class="form-botoes">
+      <button class="btn-secundario" id="btn-remigrar-acesso-cancelar">Cancelar</button>
+      <button class="btn-primario" id="btn-remigrar-acesso-confirmar">Importar Tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/db.js"></script>
+<script src="js/importar.js"></script>
+<script src="js/biblioteca.js"></script>
+<script src="js/leitor.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
